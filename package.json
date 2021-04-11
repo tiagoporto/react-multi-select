@@ -1,5 +1,6 @@
 {
   "name": "react-multi-select",
+  "homepage": "https://tiagoporto.github.io/react-multi-select/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
