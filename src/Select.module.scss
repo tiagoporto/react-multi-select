@@ -1,0 +1,48 @@
+$border-radius: 5px;
+
+.fakeInput {
+  background: #fff;
+  min-height: 40px;
+  width: 400px;
+  max-width: 90%;
+  border: none;
+  border-radius: $border-radius;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  grid-gap: 4px;
+}
+
+.input {
+  border: none;
+  outline: none;
+}
+
+.tag {
+  border-radius: $border-radius;
+  padding: 2px 4px;
+  font-weight: bold;
+
+  &:hover {
+    background: lighten(#000, 80%);
+
+    & .removeButton {
+      visibility: visible;
+    }
+  }
+
+  &Error {
+    background: lighten(red, 40%);
+
+    &:hover {
+      background: lighten(red, 40%);
+    }
+  }
+}
+.removeButton {
+  border: none;
+  background: none;
+  visibility: hidden;
+}
