@@ -6,14 +6,15 @@ stages:
   - name: "Deploy gh-pages"
     if: branch = main AND NOT type = pull_request
 
-before_deploy: npm run build
-
 jobs:
   include:
     - stage: "Deploy gh-pages"
+      script: npm run build
       deploy:
         provider: pages
         local_dir: build
-        skip_cleanup: false
+        skip_cleanup: true
         github_token: $GITHUB_TOKEN
         keep_history: true
+        on:
+          branch: main
