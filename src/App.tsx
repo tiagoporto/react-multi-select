@@ -1,10 +1,13 @@
 import React from "react";
-import "./App.css";
+import style from "./App.module.scss";
+import { Select } from "./Select";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
+      <main className={style.main}>
+        <Select />
+      </main>
     </div>
   );
 }
