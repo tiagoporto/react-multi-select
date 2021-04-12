@@ -117,7 +117,7 @@ export const Select = () => {
           >
             {emails.filtered.map((email, index) => {
               return (
-                <option value={email} key={index}>
+                <option value={email} key={index} className={style.option}>
                   {email}
                 </option>
               );
