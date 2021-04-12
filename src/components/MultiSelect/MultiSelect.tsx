@@ -1,6 +1,7 @@
 import style from "./MultiSelect.module.scss";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useGetEmails } from "./useGetEmails";
+import debounce from "debounce";
 
 interface Emails {
   selected: string[];
@@ -20,9 +21,9 @@ export const Select = () => {
     setEmails((prevState) => ({ ...prevState, filtered }));
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
     filterEmails(event.target.value);
-  };
+  }, 200);
 
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const filtered = emails.filtered.filter(
