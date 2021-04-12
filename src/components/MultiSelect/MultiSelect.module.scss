@@ -1,10 +1,14 @@
 $border-radius: 5px;
 
+%width {
+  width: 400px;
+  max-width: 90%;
+}
+
 .fakeInput {
   background: #fff;
   min-height: 40px;
-  width: 400px;
-  max-width: 90%;
+  @extend %width;
   border: none;
   border-radius: $border-radius;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
@@ -45,4 +49,8 @@ $border-radius: 5px;
   border: none;
   background: none;
   visibility: hidden;
+}
+
+.select {
+  @extend %width;
 }

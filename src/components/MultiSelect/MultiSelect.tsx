@@ -1,7 +1,14 @@
 import style from "./MultiSelect.module.scss";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  createRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useGetEmails } from "./useGetEmails";
 import debounce from "debounce";
+import { useLayer } from "react-laag";
 
 interface Emails {
   selected: string[];
@@ -11,6 +18,13 @@ interface Emails {
 export const Select = () => {
   let initialEmails = useGetEmails();
   const [emails, setEmails] = useState<Emails>({ selected: [], filtered: [] });
+  const [isOpen, setIsOpen] = useState(false);
+  const inputRef = createRef<HTMLInputElement>();
+
+  const { triggerProps, layerProps, renderLayer } = useLayer({
+    placement: "bottom-start",
+    isOpen,
+  });
 
   const filterEmails = (filter: string) => {
     const toRemove = new Set(emails.selected);
@@ -22,20 +36,24 @@ export const Select = () => {
   };
 
   const handleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
-    filterEmails(event.target.value);
+    const value = event.target.value;
+    filterEmails(value);
   }, 200);
 
+  const handleFocus = () => {
+    setIsOpen(true);
+  };
+
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const filtered = emails.filtered.filter(
-      (filteredEmail) => filteredEmail !== event.target.value
-    );
     const selected = [...emails.selected, event.target.value];
 
     setEmails((prevState) => ({
       ...prevState,
-      filtered,
       selected,
     }));
+    filterEmails("");
+    setIsOpen(false);
+    inputRef.current && (inputRef.current.value = "");
   };
 
   const removeSelected = (email: string) => () => {
@@ -61,10 +79,11 @@ export const Select = () => {
 
   return (
     <>
-      <div className={style.fakeInput}>
+      <div className={style.fakeInput} {...triggerProps}>
         {emails.selected.map((email, index) => {
           return (
             <div className={style.tag} key={index}>
+              {/* <div className={`${style.tag} ${style.tagError}`}> */}
               {email}
               <button
                 className={style.removeButton}
@@ -75,33 +94,36 @@ export const Select = () => {
             </div>
           );
         })}
-        {/*
-
-        <div className={`${style.tag} ${style.tagError}`}>
-          tiago@gmail.com
-          <button className={style.removeButton} onClick={handleClick}>
-            X
-          </button>
-        </div> */}
 
         <input
           type="text"
           onChange={handleChange}
           placeholder="Enter email..."
           className={style.input}
+          onFocus={handleFocus}
+          ref={inputRef}
         />
       </div>
 
-      <select name="emails" id="emails" onChange={handleSelect}>
-        <option value=""></option>
-        {emails.filtered.map((email, index) => {
-          return (
-            <option value={email} key={index}>
-              {email}
-            </option>
-          );
-        })}
-      </select>
+      {isOpen &&
+        renderLayer(
+          <select
+            name="emails"
+            id="emails"
+            onChange={handleSelect}
+            multiple
+            {...layerProps}
+            className={style.select}
+          >
+            {emails.filtered.map((email, index) => {
+              return (
+                <option value={email} key={index}>
+                  {email}
+                </option>
+              );
+            })}
+          </select>
+        )}
     </>
   );
 };
