@@ -1,11 +1,5 @@
 import style from "./MultiSelect.module.scss";
-import React, {
-  ChangeEvent,
-  createRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, createRef, useEffect, useState } from "react";
 import { useGetEmails } from "./useGetEmails";
 import debounce from "debounce";
 import { useLayer } from "react-laag";
