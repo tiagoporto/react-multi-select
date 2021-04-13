@@ -1,5 +1,11 @@
 import style from "./MultiSelect.module.scss";
-import React, { ChangeEvent, createRef, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  createRef,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useGetEmails } from "./useGetEmails";
 import debounce from "debounce";
 import { useLayer } from "react-laag";
@@ -31,7 +37,7 @@ export const Select = () => {
 
   const handleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    filterEmails(value);
+    value && filterEmails(value);
   }, 200);
 
   const handleFocus = () => {
@@ -39,7 +45,18 @@ export const Select = () => {
   };
 
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selected = [...emails.selected, event.target.value];
+    const value = event.target.value;
+    value && addEmail(value);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && event.currentTarget.value) {
+      addEmail(event.currentTarget.value);
+    }
+  };
+
+  const addEmail = (email: string) => {
+    const selected = [...emails.selected, email];
 
     setEmails((prevState) => ({
       ...prevState,
@@ -92,6 +109,7 @@ export const Select = () => {
         <input
           type="text"
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           placeholder="Enter email..."
           className={style.input}
           onFocus={handleFocus}
