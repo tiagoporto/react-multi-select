@@ -9,6 +9,8 @@ import React, {
 import { useGetEmails } from "./useGetEmails";
 import debounce from "debounce";
 import { useLayer } from "react-laag";
+import cx from "classnames";
+import { validateEmail } from "../../utils/validations";
 
 interface Emails {
   selected: string[];
@@ -20,7 +22,6 @@ export const Select = () => {
   const [emails, setEmails] = useState<Emails>({ selected: [], filtered: [] });
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
-
   const { triggerProps, layerProps, renderLayer } = useLayer({
     placement: "bottom-start",
     isOpen,
@@ -33,26 +34,6 @@ export const Select = () => {
       .filter((email) => email.includes(filter))
       .filter((emails) => !toRemove.has(emails));
     setEmails((prevState) => ({ ...prevState, filtered }));
-  };
-
-  const handleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    value && filterEmails(value);
-  }, 200);
-
-  const handleFocus = () => {
-    setIsOpen(true);
-  };
-
-  const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    value && addEmail(value);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && event.currentTarget.value) {
-      addEmail(event.currentTarget.value);
-    }
   };
 
   const addEmail = (email: string) => {
@@ -84,6 +65,31 @@ export const Select = () => {
     }));
   };
 
+  const handleChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    filterEmails(value);
+    setIsOpen(true);
+  }, 200);
+
+  const handleFocus = () => {
+    setIsOpen(true);
+  };
+
+  const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    value && addEmail(value);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      (event.key === "Enter" || event.key === "Tab") &&
+      event.currentTarget.value
+    ) {
+      addEmail(event.currentTarget.value);
+      event.preventDefault();
+    }
+  };
+
   useEffect(() => {
     setEmails((prevState) => ({ ...prevState, filtered: initialEmails }));
   }, [initialEmails]);
@@ -93,8 +99,12 @@ export const Select = () => {
       <div className={style.fakeInput} {...triggerProps}>
         {emails.selected.map((email, index) => {
           return (
-            <div className={style.tag} key={index}>
-              {/* <div className={`${style.tag} ${style.tagError}`}> */}
+            <div
+              className={cx(style.tag, {
+                [style.tagError]: !validateEmail(email),
+              })}
+              key={index}
+            >
               {email}
               <button
                 className={style.removeButton}
