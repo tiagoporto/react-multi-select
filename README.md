@@ -1,7 +1,6 @@
 # react-multi-select
 
 [![Build Status](https://img.shields.io/travis/com/tiagoporto/react-multi-select/main.svg?logo=travis&style=flat-square)](https://travis-ci.com/tiagoporto/react-multi-select)
-
 [![Website](https://img.shields.io/website/https/tiagoporto.github.io/react-multi-select.svg?style=flat-square)](https://tiagoporto.github.io/react-multi-select)
 
 > React multi select component
