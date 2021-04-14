@@ -24,3 +24,11 @@ Launches the test runner in the interactive watch mode.
 
 Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
+
+## Improvement suggestions
+
+- Handle empty suggestions
+- A specific version for mobile
+- Fully keyboard support: remove tags, navigate with arrow keys, add tags, navigate on select
+- while typing move focus to the suggested option on select
+- Close select on blur
